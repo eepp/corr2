@@ -1,0 +1,370 @@
+// color theme
+@color-bg: #333333;
+@color-title: #d63e4d;
+@color-section-title: #e09135;
+@color-input-grade-title: fade(white, 85%);
+
+// main gutter
+@gutter: 25px;
+@gutter-double: (@gutter * 2);
+@gutter-half: round(@gutter / 2);
+
+// widths
+@corr-width: 850px;
+@fixed-side-width: 400px;
+
+// common mix-ins
+.monospace() {
+    font-family: 'Consolas', 'Monaco', 'Ubuntu Mono', monospace;
+    font-size: 95%;
+}
+.border-box() {
+    box-sizing: border-box;
+}
+.trans-all-ease(@delay) {
+    transition: all @delay ease;
+}
+.press-btn() {
+    outline: 0;
+    font-size: 100%;
+    font-weight: bold;
+    border: none;
+    padding: 7px;
+    border-radius: 1px;
+    cursor: pointer;
+    .trans-all-ease(.1s);
+    position: relative;
+    text-align: center;
+    &:active {
+        top: 2px;
+    }
+}
+.max-btn() {
+    &:hover {
+        background: #1c9e4c;
+        color: #c5f4d6;
+    }
+    &:active {
+        background: #147138;
+    }
+}
+.min-btn() {
+    &:hover {
+        background: #d04234;
+        color: #f0bdb4;
+    }
+    &:active {
+        background: #a33125;
+    }
+}
+
+// scroll bar for WebKit
+::-webkit-scrollbar {
+    @sz: 10px;
+
+	width: @sz;
+    height: @sz;
+}
+::-webkit-scrollbar-thumb {
+    background: #666;
+}
+::-webkit-scrollbar,
+::-webkit-scrollbar-corner {
+    background: #111;
+}
+
+// document
+* {
+    margin: 0;
+    padding: 0;
+}
+.clear {
+    clear: both;
+}
+body {
+    font-family: 'Arial', 'Helvetica', 'Ubuntu', sans-serif;
+    font-size: 16px;
+    background: url(bg.png) @color-bg;
+}
+#corr-container {
+    margin-left: @gutter;
+    width: @corr-width;
+
+    h1 {
+        text-align: left;
+        margin: @gutter;
+        color: fade(white, 50%);
+        font-size: 200%;
+        font-weight: normal;
+        text-shadow: 0px 3px 1px #222;
+
+        strong {
+            font-weight: bold;
+            color: @color-title;
+            font-size: 125%;
+        }
+        sup {
+            font-size: 75%;
+            color: fade(white, 40%);
+        }
+        code {
+            margin-left: @gutter-double;
+            color: @color-title;
+            .monospace;
+        }
+    }
+    #corr {
+        @input-pad: 5px;
+
+        margin-bottom: @gutter;
+        background: fade(white, 7%);
+        .border-box;
+        padding: @gutter;
+        border: 1px solid fade(white, 8%);
+
+        textarea,
+        input[type="text"] {
+            background: fade(white, 80%);
+            padding: @input-pad;
+            border: none;
+            outline: 0;
+            .border-box;
+            font-size: 100%;
+            box-shadow: inset 0 1px 2px fade(black, 40%), 0 -1px 0 #333, 0 1px 0 #333;
+        }
+        .section {
+            margin-top: @gutter;
+            &:first-child {
+                margin-top: 0;
+            }
+            
+            .section-title {
+                h2 {
+                    color: @color-section-title;
+                    font-weight: normal;
+                    font-size: 140%;
+                    text-shadow: 0px 2px 0px #333;
+                }
+            }
+            .input-row {
+                .trans-all-ease(.15s);
+                &.grade, &.gen {
+                    @pad: 5px;
+                    
+                    cursor: pointer;
+                    padding-top: @pad;
+                    padding-bottom: @pad;
+                    &:hover, &.selected {
+                        background: fade(black, 25%);
+                    }
+                    &.error {
+                        background: fade(#f76f60, 25%);
+                    }
+
+                    .title, .ans, .input {
+                        float: left;
+                    }
+                    .title {
+                        color: @color-input-grade-title;
+                        width: 40%;
+                        position: relative;
+                        top: @input-pad;
+                        .border-box;
+                        text-shadow: 0px 1px 0px #222;
+                    }
+                    &.selected .title {
+                        color: @color-title;
+                    }
+                    .info {
+                        display: none;
+                    }
+                    .buttons {
+                        float: right;
+
+                        .btn {
+                            @color: fade(black, 50%);
+
+                            .trans-all-ease(.05s);
+                            box-shadow: inset 0 1px 2px fade(black, 60%);
+                            float: left;
+                            width: 30px;
+                            background: @color;
+                            padding: @input-pad;
+                            text-align: center;
+                            color: #ccc;
+                            border-left: 1px solid lighten(@color, 25%);
+                            font-weight: bold;
+                            cursor: pointer;
+                            &:first-child {
+                                border-left: none;
+                            }
+                            &:hover {
+                                background: #efd33c;
+                                color: #5c5117;
+                            }
+                            &:active {
+                                background: #caad11;
+                            }
+                            &.max {
+                                .max-btn;
+                            }
+                            &.min {
+                                .min-btn;
+                            }
+                        }
+                    }
+                }
+                &.grade .input {
+                    width: 10%;
+
+                    input {
+                        width: 100%;
+                        .monospace;
+                    }
+                }
+                &.gen .input {
+                    width: 59.99%;
+
+                    input, textarea {
+                        width: 100%;
+                    }
+                    textarea {
+                        height: 150px;
+                    }
+                }
+                &.submit {
+                    margin-top: @gutter;
+
+                    input {
+                        .press-btn;
+                        color: fade(black, 80%);
+                        float: right;
+                        background-color: @color-section-title;
+                        width: 80px;
+                        &:hover {
+                            background-color: lighten(@color-section-title, 10%);
+                        }
+                        &:active {
+                            background-color: darken(@color-section-title, 10%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+#fixed-side-container {
+    position: fixed;
+    top: @gutter;
+    left: (@gutter * 2) + @corr-width;
+    width: @fixed-side-width;
+
+    .box {
+        background: fade(black, 50%);
+        border: 1px solid fade(white, 20%);
+        padding: @gutter;
+        .border-box;
+        width: 100%;
+        margin-top: @gutter-half;
+        &:first-child {
+            margin-top: 0;
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 125%;
+            color: fade(white, 70%);
+            margin-bottom: @gutter-half;
+            border-bottom: 1px solid fade(white, 20%);
+            line-height: 150%;
+        }
+        &.ctrl-status {
+            .status {
+                margin-bottom: @gutter-half;
+                font-size: 150%;
+                font-weight: bold;
+                
+                .total {
+                    float: right;
+                    color: #54add9;
+                    
+                    .max {
+                        color: #666;
+                        margin-left: 2px;
+                        font-size: 80%;
+                    }
+                }
+                .left-fields {
+                    float: left;
+                    &.good {
+                        color: #54d97b;
+                    }
+                    &.bad {
+                        color: #f76f60;
+                    }
+                }
+            }
+            .ctrl {
+                text-align: left;
+
+                .btn {
+                    .press-btn;
+                    background: #777;
+                    color: #222;
+                    display: inline-block;
+                    width: 55px;
+                    margin-left: @gutter-half;
+                    &:first-child {
+                        margin-left: 0;
+                    }
+                    &:hover {
+                        background: #aaa;
+                    }
+                    &:active {
+                        background: #666;
+                    }
+                    
+                    &.max {
+                        .max-btn;
+                    }
+                    &.zero {
+                        .min-btn;
+                    }
+                }
+            }
+        }
+    }
+    .info {
+        background: fade(#0d3616, 65%);
+        display: none;
+        color: fade(white, 80%);
+        
+        table, p, ul {
+            margin-top: @gutter-half;
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+        ul {
+            margin-left: 30px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            
+            thead {
+                font-weight: bold;
+            }
+            th {
+                background: fade(black, 50%);
+            }
+            td {
+                background: fade(white, 15%);
+            }
+            td, th {
+                padding: 5px;
+                border: 1px solid fade(white, 10%);
+            }
+        }
+    }
+}
