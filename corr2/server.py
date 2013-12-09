@@ -39,7 +39,7 @@ def _get_results(form_data, template, template_path, output_dir):
     results = {
         'infos': {
             'title': template.title,
-            'template_path': template_path,
+            'template_path': os.path.abspath(template_path),
             'date': DT.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             'version': __version__,
             'max': template.max,
