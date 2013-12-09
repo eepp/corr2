@@ -213,6 +213,25 @@ using options. Do
 to see the list of options.
 
 
+keyboard shortcuts
+------------------
+
+Within the Web editor, the following keyboard shortcuts should work:
+
+  * `Down`: go to next field
+  * `Up`: go to previous field
+  * `Ctrl+Down`: go to next section
+  * `Ctrl+Up`: go to previous section
+  * specific to grade fields:
+    * `Z`: zero
+    * `X`: max
+    * `A`: max × 0.25
+    * `S`: max × 0.5
+    * `D`: max × 0.75
+  * `X`: (in a grade field)
+  * `Ctrl+Enter`: save (submit form)
+
+
 todo
 ----
 
