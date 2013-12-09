@@ -30,13 +30,14 @@
         data-init="{{ opts.init }}">
             <form autocomplete="off" method="post" action="/save">
                 {% for s in template.sections %}
-                    <div class="section">
+                    <div class="section" data-id="{{ s.id }}">
                         <div class="section-title">
                             <h2>{{ s.title }}</h2>
                             {% for f in s.fields %}
                                 {% if f.type == 'gen' %}
                                     <div
                                     class="input-row gen"
+                                    data-id="{{ f.id }}"
                                     {% if f.mandatory %}
                                         data-mandatory="{{ f.mandatory }}"
                                     {% endif %}
@@ -58,6 +59,7 @@
                                 {% if f.type == 'grade' %}
                                     <div
                                     class="input-row grade"
+                                    data-id="{{ f.id }}"
                                     data-max="{{ f.max }}"
                                     {% if f.default is not none %}
                                         data-default="{{ f.default }}"
