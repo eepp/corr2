@@ -67,6 +67,9 @@ class TemplateParser:
         # ensure no duplicate section/field IDs
         self._ensure_no_duplicates()
 
+        # ensure unique ID points to existing field
+        self._ensure_unique_id()
+
         return self._t
 
     def _bool_from_str(string):
@@ -110,10 +113,8 @@ class TemplateParser:
 
         # save unique ID pointer
         uniqueid_el = settings_el.find('unique-id')
-        self._unique_id = {
-            'section_id': uniqueid_el.get('section-id'),
-            'field_id': uniqueid_el.get('field-id')
-        }
+        self._usid = uniqueid_el.get('section-id')
+        self._ufid = uniqueid_el.get('field-id')
 
     def _parse_head(self, head_el):
         # get title
@@ -210,3 +211,12 @@ class TemplateParser:
         # make sure there's no duplicate
         if len(set(sections_fields)) != len(sections_fields):
             raise TemplateParserError('duplicate section/field ID')
+
+    def _ensure_unique_id(self):
+        # try to find field pointed to by unique ID
+        if self._usid in self._t.sections:
+            if self._ufid in self._t.sections[self._usid].fields:
+                return
+
+        # not found
+        raise TemplateParserError('cannot find unique ID (section "{}", field "{}")'.format(self._usid, self._ufid))
