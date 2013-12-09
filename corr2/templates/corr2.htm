@@ -2,9 +2,9 @@
 {% macro field_info(f) -%}
     {% if f.info is not none %}
         {% if f.info['escape'] %}
-            <div class="info"><pre>{{ f.info.text | escape }}</pre></div>
+            <div class="info"><pre>{{ f.info.text }}</pre></div>
         {% else %}
-            <div class="info">{{ f.info.text }}</div>
+            <div class="info">{{ f.info.text | safe }}</div>
         ­{% endif %}
     {% endif %}
 {%- endmacro %}
@@ -13,7 +13,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ template.title }} &mdash; cOrr2</title>
+    <title>{{ template.title | safe }} &mdash; cOrr2</title>
 
     <link rel="icon" type="image/png" href="/static/img/favico.png">
     <link rel="stylesheet" type="text/css" href="/static/css/corr2.css">
@@ -23,7 +23,7 @@
 </head>
 <body>
     <div id="corr-container">
-        <h1>c<strong>O</strong>rr<sup>2</sup><code>{{ template.title }}</code></h1>
+        <h1>c<strong>O</strong>rr<sup>2</sup><code>{{ template.title | safe }}</code></h1>
         <div id="corr"
         data-max-total="{{ template.max }}"
         data-allow-total-overflow="{{ opts.allowTotalOverflow | lower }}"
@@ -47,7 +47,7 @@
                                 {% if f.default is not none %}
                                     data-default="{{ f.default }}"
                                 {% endif %}>
-                                    <div class="title">{{ f.title }}</div>
+                                    <div class="title">{{ f.title | safe }}</div>
                                     <div class="input">
                                         {% if f.multiline %}
                                             <textarea name="{{ input_name(s, f) }}"></textarea>
@@ -71,7 +71,7 @@
                                 {% if not f.exclude_from_total %}
                                     data-intot="true"
                                 {% endif %}>
-                                    <div class="title">{{ f.title }}</div>
+                                    <div class="title">{{ f.title | safe }}</div>
                                     <div class="input"><input type="text" name="{{ input_name(s, f) }}"></div>
                                     <div class="buttons">
                                         {% for ws in f.ws %}
@@ -113,7 +113,7 @@
         <div class="box info" id="info-box">
             <h2>info</h2>
             <div id="info">
-                allo
+
             </div>
         </div>
     </div>
