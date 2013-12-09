@@ -1,3 +1,4 @@
+import re
 from lxml import etree
 from copy import deepcopy
 
@@ -90,6 +91,9 @@ class TemplateParser:
 
     def _bool_from_str(string):
         return string == 'true'
+
+    def _is_valid_id(tid):
+        return re.match('^[a-zA-Z][a-zA-Z0-9_-]*$', tid)
 
     def _parse_bool_option(self, option_el):
         val = TemplateParser._bool_from_str(option_el.get('value'))
@@ -185,6 +189,8 @@ class TemplateParser:
         fid = field_el.get('id')
         title = field_el.get('title')
         default = field_el.get('default')
+        if not TemplateParser._is_valid_id(fid):
+            raise TemplateParserError('invalid ID format: "{}"'.format(fid))
         field.id = fid
         field.title = fid
         field.info = None
@@ -213,6 +219,8 @@ class TemplateParser:
         sid = section_el.get('id')
         title = section_el.get('title')
         section = Section()
+        if not TemplateParser._is_valid_id(sid):
+            raise TemplateParserError('invalid ID format: "{}"'.format(sid))
         section.id = sid
         section.title = sid
         section.fields = {}
