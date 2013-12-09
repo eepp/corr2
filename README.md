@@ -228,7 +228,6 @@ Within the Web editor, the following keyboard shortcuts should work:
     * `A`: max × 0.25
     * `S`: max × 0.5
     * `D`: max × 0.75
-  * `X`: (in a grade field)
   * `Ctrl+Enter`: save (submit form)
 
 
