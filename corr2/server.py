@@ -72,7 +72,7 @@ def _get_results(form_data, template, template_path, output_dir):
                 if not t_field.exclude_from_total:
                     result = float(result)
                     total += result
-            field['result'] = result
+            field['result'] = result.replace('\r', '')
             res_sections[sid]['fields'][fid] = field
 
     # set total
