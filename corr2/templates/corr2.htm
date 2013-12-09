@@ -2,7 +2,7 @@
 {% macro field_info(f) -%}
     {% if f.info is not none %}
         {% if f.info['escape'] %}
-            <div class="info">{{ f.info.text | escape }}</div>
+            <div class="info"><pre>{{ f.info.text | escape }}</pre></div>
         {% else %}
             <div class="info">{{ f.info.text }}</div>
         ­{% endif %}
@@ -55,6 +55,7 @@
                                             <input type="text" name="{{ input_name(s, f) }}">
                                         {% endif %}
                                     </div>
+                                    {{ field_info(f) }}
 
                                     <div class="clear"></div>
                                 </div>
