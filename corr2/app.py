@@ -49,6 +49,15 @@ def _parse_args():
     return opts, args[0]
 
 
+def _log_template(template):
+    logging.info('    Title: {}'.format(template.title))
+    logging.info('    Sections:')
+    for section in template.sections.values():
+        logging.info('        {}:'.format(section.title))
+        for field in section.fields.values():
+            logging.info('            {}  [{}]'.format(field.title, str(field)))
+
+
 def start(host, port, template_path):
     # parse template
     logging.info('Parsing template "{}"'.format(template_path))
@@ -61,12 +70,7 @@ def start(host, port, template_path):
     except Exception as err:
         _unknown_error(err)
     logging.info('Parsed template:')
-    logging.info('    Title: {}'.format(template.title))
-    logging.info('    Sections:')
-    for section in template.sections.values():
-        logging.info('        {}:'.format(section.title))
-        for field in section.fields.values():
-            logging.info('            {}  [{}]'.format(field.title, str(field)))
+    _log_template(template)
 
     # start server
     logging.info('Starting cOrr2 server')

@@ -1,4 +1,13 @@
 from lxml import etree
+from copy import deepcopy
+
+
+class WeightShortcut:
+    def __init__(self, wstype, val=None, caption=None):
+        self.type = wstype
+        self.val = val
+        self.realval = val
+        self.caption = caption
 
 
 class Field:
@@ -52,6 +61,13 @@ class TemplateParser:
             'gen': self._get_gen_field,
             'grade': self._get_grade_field
         }
+        self._dws = [
+            WeightShortcut(wstype='max', val=None, caption=None),
+            WeightShortcut(wstype='mul', val=0.75, caption='¾'),
+            WeightShortcut(wstype='mul', val=0.5, caption='½'),
+            WeightShortcut(wstype='mul', val=0.25, caption='¼'),
+            WeightShortcut(wstype='mul', val=0, caption='0')
+        ]
         self._tree = tree
 
     def parse(self):
@@ -83,20 +99,18 @@ class TemplateParser:
         val = option_el.get('value')
         self._t.options[option_el.get('name')] = val
 
-    def _get_dws(self, dws_el):
+    def _get_ws(self, ws_el):
         shortcuts = []
-        for shortcut_el in dws_el.findall('shortcut'):
-            shortcut = {
-                'type': shortcut_el.get('type'),
-                'caption': None
-            }
+        for shortcut_el in ws_el.findall('shortcut'):
+            wstype = shortcut_el.get('type')
             val = shortcut_el.get('val')
             caption = shortcut_el.get('caption')
             if val is not None:
-                shortcut['val'] = float(val)
+                val = float(val)
             if caption is not None:
-                shortcut['caption'] = caption
-            shortcuts.append(shortcut)
+                caption = caption
+            ws = WeightShortcut(wstype=wstype, val=val, caption=caption)
+            shortcuts.append(ws)
 
         return shortcuts
 
@@ -109,7 +123,7 @@ class TemplateParser:
         # save default weight shortcuts
         dws_el = settings_el.find('default-weight-shortcuts')
         if dws_el is not None:
-            self._dws = self._get_dws(dws_el)
+            self._dws = self._get_ws(dws_el)
 
         # save unique ID pointer
         uniqueid_el = settings_el.find('unique-id')
@@ -134,6 +148,15 @@ class TemplateParser:
 
         return field
 
+    def _resolve_field_ws(self, field):
+        for ws in field.ws:
+            if ws.type == 'mul':
+                ws.realval = ws.val * field.max
+            elif ws.type == 'max':
+                ws.realval = field.max
+            if ws.caption is None:
+                ws.caption = str(round(ws.realval, 2))
+
     def _get_grade_field(self, field_el):
         field = GradeField()
 
@@ -143,6 +166,14 @@ class TemplateParser:
         eft = field_el.get('exclude-from-total')
         if eft is not None:
             field.exclude_from_total = TemplateParser._bool_from_str(eft)
+
+        # custom weight shortcuts
+        cws_el = field_el.find('custom-weight-shortcuts')
+        if cws_el is not None:
+            field.ws = self._get_ws(cws_el)
+        else:
+            field.ws = deepcopy(self._dws)
+        self._resolve_field_ws(field)
 
         return field
 
