@@ -1,5 +1,5 @@
 import sys
-import os.path
+import os
 import logging
 from optparse import OptionParser
 from corr2 import server
@@ -32,11 +32,19 @@ def _parse_args():
                       default='127.0.0.1', help='listen on host ADDR')
     parser.add_option('-p', '--port', dest='port', metavar='PORT', type='int',
                       default=8080, help='listen on port PORT')
+    parser.add_option('-O', '--output-dir', dest='output_dir', metavar='DIR',
+                      default=os.getcwd(),
+                      help='JSON results output directory (defaults to CWD)')
     opts, args = parser.parse_args()
 
     # validate options
     if opts.port < 1 or opts.port > 65535:
         _cmdline_error(parser, 'invalid port: {}.'.format(opts.port))
+
+    # validate output directory
+    opts.output_dir = os.path.abspath(opts.output_dir)
+    if not os.path.isdir(opts.output_dir):
+        _cmdline_error(parser, 'invalid output directory: "{}".'.format(opts.output_dir))
 
     # check positional arguments
     if len(args) < 1:
@@ -56,7 +64,7 @@ def _log_template(template):
             logging.info('            {}  [{}]'.format(field.title, str(field)))
 
 
-def start(host, port, template_path):
+def start(host, port, template_path, output_dir):
     # parse template
     logging.info('Parsing template "{}"'.format(template_path))
     try:
@@ -71,7 +79,7 @@ def start(host, port, template_path):
 
     # start server
     logging.info('Starting cOrr2 server')
-    server.run(host, port, template, template_path)
+    server.run(host, port, template, template_path, output_dir)
 
 
 def run():
@@ -83,5 +91,5 @@ def run():
 
     # start app
     logging.info('Starting cOrr2')
-    start(opts.host, opts.port, template_path)
+    start(opts.host, opts.port, template_path, opts.output_dir)
     logging.info('Stopping cOrr2')

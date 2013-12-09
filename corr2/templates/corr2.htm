@@ -42,7 +42,7 @@
                                 class="input-row gen"
                                 data-id="{{ f.id }}"
                                 {% if f.mandatory %}
-                                    data-mandatory="{{ f.mandatory }}"
+                                    data-mandatory="{{ f.mandatory | lower }}"
                                 {% endif %}
                                 {% if f.default is not none %}
                                     data-default="{{ f.default }}"

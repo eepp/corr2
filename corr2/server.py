@@ -2,12 +2,12 @@ import logging
 import flask
 import json
 import datetime as DT
+import socket
+import os.path
 from corr2 import templateparser
 from corr2 import __version__
 
 
-_template_path = None
-_template = None
 _flask_app = flask.Flask(__name__)
 
 
@@ -19,20 +19,31 @@ def _ep_index():
 @_flask_app.route('/save', methods=['POST'])
 def _ep_save():
     # get results
-    results = _get_results(flask.request.form, _template, _template_path)
-    json_txt = json.dumps(results, indent=4, ensure_ascii=False)
-    response = flask.Response(json_txt, content_type='application/json; charset=utf-8')
-    return response
+    results = _get_results(flask.request.form, _template, _template_path,
+                           _output_dir)
+
+    # output results
+    path = results['infos']['output_filename']
+    with open(path, 'w') as f:
+        json_txt = json.dumps(results, indent=4, ensure_ascii=False, sort_keys=True)
+        f.write(json_txt)
+        logging.info('Wrote result to "{}"'.format(path))
+    return flask.redirect('/')
 
 
-def _get_results(form_data, template, template_path):
+def _get_output_filename(output_dir, uid):
+    return os.path.join(output_dir, '{}.json'.format(uid))
+
+
+def _get_results(form_data, template, template_path, output_dir):
     results = {
         'infos': {
             'title': template.title,
             'template_path': template_path,
             'date': DT.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             'version': __version__,
-            'max': template.max
+            'max': template.max,
+            'hostname': socket.gethostname()
         },
         'sections': {}
     }
@@ -71,6 +82,13 @@ def _get_results(form_data, template, template_path):
         total = 0
     results['infos']['total'] = total
 
+    # set output filename
+    uid_res = basic_results[template.usid][template.ufid]
+    if len(uid_res.strip()) == 0:
+        uid_res = results['infos']['date']
+    out_fn = _get_output_filename(output_dir, uid_res)
+    results['infos']['output_filename'] = out_fn
+
     return results
 
 
@@ -85,8 +103,9 @@ def _get_basic_results(form_data):
     return results
 
 
-def run(host, port, template, template_path):
-    global _template, _template_path
+def run(host, port, template, template_path, output_dir):
+    global _template, _template_path, _output_dir
     _template = template
     _template_path = template_path
+    _output_dir = output_dir
     _flask_app.run(host=host, port=port)

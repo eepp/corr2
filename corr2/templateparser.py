@@ -170,8 +170,8 @@ class TemplateParser:
 
         # save unique ID pointer
         uniqueid_el = settings_el.find('unique-id')
-        self._usid = uniqueid_el.get('section-id')
-        self._ufid = uniqueid_el.get('field-id')
+        self._t.usid = uniqueid_el.get('section-id')
+        self._t.ufid = uniqueid_el.get('field-id')
 
     def _parse_head(self, head_el):
         # get title
@@ -291,9 +291,10 @@ class TemplateParser:
     def _ensure_unique_id(self):
         # try to find field pointed to by unique ID
         try:
-            field = self._t.get_field(self._usid, self._ufid)
+            field = self._t.get_field(self._t.usid, self._t.ufid)
+            field.mandatory = True
         except TemplateParserError:
-            raise TemplateParserError('cannot find unique ID field (section "{}", field "{}")'.format(self._usid, self._ufid))
+            raise TemplateParserError('cannot find unique ID field (section "{}", field "{}")'.format(self._t.usid, self._t.ufid))
 
     def _compute_max(self):
         self._t.max = 0

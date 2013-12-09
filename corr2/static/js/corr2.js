@@ -17,7 +17,7 @@ function getDataBool($el, name) {
         return false;
     }
 
-    return dataStr == "true";
+    return dataStr.toLowerCase() == "true";
 }
 
 function getDataFloat($el, name) {
@@ -353,6 +353,7 @@ function gotoRelativeSection(cb) {
     if ($relSection.length == 1) {
         // first field
         $firstField = getSectionFirstField($relSection);
+        console.log($firstField);
         if ($firstField.length == 1) {
             focusField($firstField);
         }
