@@ -8,6 +8,7 @@
         ­{% endif %}
     {% endif %}
 {%- endmacro %}
+{% macro input_name(s, f) -%}{{ s.id }}.{{ f.id }}{%- endmacro %}
 <!doctype html>
 <html>
 <head>
@@ -24,7 +25,7 @@
     <div id="corr-container">
         <h1>c<strong>O</strong>rr<sup>2</sup><code>{{ template.title }}</code></h1>
         <div id="corr"
-        data-max-total="{{ template.total }}"
+        data-max-total="{{ template.max }}"
         data-allow-total-overflow="{{ opts.allowTotalOverflow | lower }}"
         data-allow-total-underflow="{{ opts.allowTotalUnderflow | lower }}"
         data-init="{{ opts.init }}">
@@ -49,9 +50,9 @@
                                     <div class="title">{{ f.title }}</div>
                                     <div class="input">
                                         {% if f.multiline %}
-                                            <textarea></textarea>
+                                            <textarea name="{{ input_name(s, f) }}"></textarea>
                                         {% else %}
-                                            <input type="text">
+                                            <input type="text" name="{{ input_name(s, f) }}">
                                         {% endif %}
                                     </div>
 
@@ -70,7 +71,7 @@
                                     data-intot="true"
                                 {% endif %}>
                                     <div class="title">{{ f.title }}</div>
-                                    <div class="input"><input type="text"></div>
+                                    <div class="input"><input type="text" name="{{ input_name(s, f) }}"></div>
                                     <div class="buttons">
                                         {% for ws in f.ws %}
                                             <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption }}</div>

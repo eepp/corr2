@@ -14,7 +14,8 @@ class WeightShortcut:
 
 
 class Field:
-    pass
+    def get_type(self):
+        return self.type
 
 
 class GenField(Field):
@@ -34,11 +35,38 @@ class GradeField(Field):
 
 
 class Section:
-    pass
+    def __init__(self):
+        self.mapped_fields = {}
+
+    def map_field(self, field):
+        fid = field.id
+        if fid in self.mapped_fields:
+            raise TemplateParserError('duplicate field ID "{}"'.format(fid))
+        self.mapped_fields[fid] = field
+
+    def get_field(self, fid):
+        if fid not in self.mapped_fields:
+            raise TemplateParserError('no such field with ID "{}"'.format(fid))
+        return self.mapped_fields[fid]
 
 
 class Template:
-    pass
+    def __init__(self):
+        self.mapped_sections = {}
+
+    def map_section(self, section):
+        sid = section.id
+        if sid in self.mapped_sections:
+            raise TemplateParserError('duplicate section ID "{}"'.format(sid))
+        self.mapped_sections[sid] = section
+
+    def get_section(self, sid):
+        if sid not in self.mapped_sections:
+            raise TemplateParserError('no such section with ID "{}"'.format(sid))
+        return self.mapped_sections[sid]
+
+    def get_field(self, sid, fid):
+        return self.get_section(sid).get_field(fid)
 
 
 class TemplateParserError(Exception):
@@ -93,14 +121,11 @@ class TemplateParser:
         # parse body
         self._parse_body(self._tree.xpath('/corr/body')[0])
 
-        # ensure there's no duplicate section/field
-        self._ensure_no_duplicates()
-
         # ensure unique ID points to existing field
         self._ensure_unique_id()
 
-        # compute total
-        self._compute_total()
+        # compute max
+        self._compute_max()
 
         return self._t
 
@@ -246,11 +271,13 @@ class TemplateParser:
         section.fields = []
         if title is not None:
             section.title = title
+        self._t.map_section(section)
 
         # parse all fields
         for field_el in section_el.findall('*'):
             field = self._get_field(field_el)
             section.fields.append(field)
+            section.map_field(field)
 
         # add to template sections
         self._t.sections.append(section)
@@ -261,32 +288,17 @@ class TemplateParser:
         for section_el in body_el.findall('section'):
             self._parse_section(section_el)
 
-    def _ensure_no_duplicates(self):
-        # build list of (section ID, field ID) pairs
-        sections_fields = []
-        for section in self._t.sections:
-            sid = section.id
-            sections_fields.extend([(sid, f.id) for f in section.fields])
-
-        # make sure there's no duplicate
-        if len(set(sections_fields)) != len(sections_fields):
-            raise TemplateParserError('duplicate section/field ID')
-
     def _ensure_unique_id(self):
         # try to find field pointed to by unique ID
-        for section in self._t.sections:
-            if section.id == self._usid:
-                for field in section.fields:
-                    if field.id == self._ufid:
-                        return
+        try:
+            field = self._t.get_field(self._usid, self._ufid)
+        except TemplateParserError:
+            raise TemplateParserError('cannot find unique ID field (section "{}", field "{}")'.format(self._usid, self._ufid))
 
-        # not found
-        raise TemplateParserError('cannot find unique ID (section "{}", field "{}")'.format(self._usid, self._ufid))
-
-    def _compute_total(self):
-        self._t.total = 0
+    def _compute_max(self):
+        self._t.max = 0
         for section in self._t.sections:
             for field in section.fields:
                 if type(field) is GradeField and not field.exclude_from_total:
                     if field.max >= 0:
-                        self._t.total += field.max
+                        self._t.max += field.max

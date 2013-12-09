@@ -4,9 +4,7 @@ import logging
 from optparse import OptionParser
 from corr2 import server
 from corr2 import templateparser
-
-
-__version__ = 'cOrr 2.0.0'
+from corr2 import __version__
 
 
 def _cmdline_error(parser, err_msg):
@@ -64,7 +62,6 @@ def start(host, port, template_path):
     try:
         tparser = templateparser.TemplateParser.fromfile(template_path)
         template = tparser.parse()
-        #print(json.dumps(template.sections, indent=4, ensure_ascii=False))
     except templateparser.TemplateParserError as err:
         _template_error(err)
     except Exception as err:
@@ -74,7 +71,7 @@ def start(host, port, template_path):
 
     # start server
     logging.info('Starting cOrr2 server')
-    server.run(host, port, template)
+    server.run(host, port, template, template_path)
 
 
 def run():
