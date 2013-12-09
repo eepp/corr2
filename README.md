@@ -13,7 +13,7 @@ is a Web template where you may easily fill grades in.
 
 Here's a simple example of a template:
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 A very simple cOrr2 XML template.
@@ -76,7 +76,7 @@ cOrr2 is built in Python 3 and needs the following packages:
   * [lxml](http://lxml.de/)
   * [Flask](http://flask.pocoo.org/docs/)
 
-`lessc` is also needed to build the CSS file.
+[`lessc`](http://lesscss.org/) is also needed to build the CSS file.
 
 
 getting started
