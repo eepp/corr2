@@ -239,7 +239,7 @@ function initRowsActions() {
         $(this).find('.input > *').focus();
     });
 
-    
+
     $('.input-row .input > *').focus(function() {
         $field = getInputField($(this));
 
@@ -314,7 +314,7 @@ function gotoPreviousField() {
 function gotoNextField() {
     // current field
     var $curField = getCurrentField();
-    
+
     // next field
     var $nextField = null;
     var takeNext = false;
@@ -372,7 +372,12 @@ function gotoNextSection() {
 }
 
 function getFieldMax($field) {
-    return getDataFloat($field, 'max');
+    var max = getDataFloat($field, 'max');
+    if (max < 0) {
+        max = 0;
+    }
+
+    return max;
 }
 
 function applyMaxFracCurrentField(frac) {
