@@ -216,6 +216,8 @@ class TemplateParser:
         if title is not None:
             field.title = title
         if default is not None:
+            if type(field) is GradeField and default == 'max':
+                default = str(field.max)
             field.default = default
 
         # info
