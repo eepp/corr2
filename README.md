@@ -5,7 +5,7 @@ Grading is painful. It generally involves (at least in my case) repeating the
 same thing hundreds of times in a row. This repetitive task is prone to errors
 and may also lead to severe mental disorder.
 
-**cOrr2** puts (more) fun into grading.
+**cOrr2** puts (more) fun into grading. [Try it here!](http://eepp.github.io/corr2)
 
 cOrr2 is a Web-based grading tool. The input is an XML description (hopefully
 a more visual editor can be built in the future) of a grade sheet and the output
