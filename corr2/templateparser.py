@@ -80,11 +80,11 @@ class TemplateParser:
         # parse body
         self._parse_body(self._tree.xpath('/corr/body')[0])
 
-        # ensure no duplicate section/field IDs
-        self._ensure_no_duplicates()
-
         # ensure unique ID points to existing field
         self._ensure_unique_id()
+
+        # compute total
+        self._compute_total()
 
         return self._t
 
@@ -222,9 +222,13 @@ class TemplateParser:
         # parse all fields
         for field_el in section_el.findall('*'):
             field = self._get_field(field_el)
+            if field.id in section.fields:
+                raise TemplateParserError('duplicate field "{}" in section "{}"'.format(field.id, section.id))
             section.fields[field.id] = field
 
         # add to template sections
+        if section.id in self._t.sections:
+            raise TemplateParserError('duplicate section "{}"'.format(section.id))
         self._t.sections[section.id] = section
 
     def _parse_body(self, body_el):
@@ -232,16 +236,6 @@ class TemplateParser:
         self._t.sections = {}
         for section_el in body_el.findall('section'):
             self._parse_section(section_el)
-
-    def _ensure_no_duplicates(self):
-        # build list of (section ID, field ID) pairs
-        sections_fields = []
-        for sid, section in self._t.sections.items():
-            sections_fields.extend([(sid, fid) for fid in section.fields.keys()])
-
-        # make sure there's no duplicate
-        if len(set(sections_fields)) != len(sections_fields):
-            raise TemplateParserError('duplicate section/field ID')
 
     def _ensure_unique_id(self):
         # try to find field pointed to by unique ID
@@ -251,3 +245,11 @@ class TemplateParser:
 
         # not found
         raise TemplateParserError('cannot find unique ID (section "{}", field "{}")'.format(self._usid, self._ufid))
+
+    def _compute_total(self):
+        self._t.total = 0
+        for section in self._t.sections.values():
+            for field in section.fields.values():
+                if type(field) is GradeField and not field.exclude_from_total:
+                    if field.max >= 0:
+                        self._t.total += field.max
