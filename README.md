@@ -65,7 +65,91 @@ After running cOrr2, go to its URL and you get this:
 ![cOrr2 output example](http://0x3b.org/ss/thouing952.png)
 
 Once saved, the output is a JSON file which can later be processed to give back
-results to students or a report to the school.
+results to students or a report to the school:
+
+```javascript
+{
+    "infos": {
+        "date": "2013-12-09 16:01:57", 
+        "hostname": "archphil", 
+        "max": 100.0, 
+        "output_filename": "/home/eepp/dev/corr2/John Smith.json", 
+        "template_path": "/home/eepp/dev/corr2/examples/simple.xml", 
+        "title": "ENG101: report #2", 
+        "total": 62.5, 
+        "version": "cOrr 2.0.0"
+    }, 
+    "sections": {
+        "id": {
+            "fields": {
+                "name": {
+                    "result": "John Smith", 
+                    "title": "Student name", 
+                    "type": "gen"
+                }
+            }, 
+            "title": "Identification"
+        }, 
+        "report": {
+            "fields": {
+                "comments": {
+                    "result": "Could be better, John. Pay attention to the logical order of your text next time.", 
+                    "title": "Comments", 
+                    "type": "gen"
+                }, 
+                "headings": {
+                    "max": 15.0, 
+                    "result": 11.25, 
+                    "title": "Headings", 
+                    "type": "grade"
+                }, 
+                "indexc": {
+                    "max": 10.0, 
+                    "result": 7.5, 
+                    "title": "Index cards", 
+                    "type": "grade"
+                }, 
+                "language": {
+                    "max": 20.0, 
+                    "result": 10.0, 
+                    "title": "Language", 
+                    "type": "grade"
+                }, 
+                "order": {
+                    "max": 20.0, 
+                    "result": 5.0, 
+                    "title": "Logical order, complete", 
+                    "type": "grade"
+                }, 
+                "ownwords": {
+                    "max": 15.0, 
+                    "result": 10.0, 
+                    "title": "Own words", 
+                    "type": "grade"
+                }, 
+                "subject": {
+                    "result": "Animals and stuff", 
+                    "title": "Report subject", 
+                    "type": "gen"
+                }, 
+                "timeline": {
+                    "max": 15.0, 
+                    "result": 15.0, 
+                    "title": "Timeline", 
+                    "type": "grade"
+                }, 
+                "title": {
+                    "max": 5.0, 
+                    "result": 3.75, 
+                    "title": "Folder/title page", 
+                    "type": "grade"
+                }
+            }, 
+            "title": "Text report"
+        }
+    }
+}
+```
 
 
 dependencies
