@@ -13,10 +13,10 @@
 <head>
     <meta charset="utf-8">
     <title>{{ template.title }} &mdash; cOrr2</title>
-    
+
     <link rel="icon" type="image/png" href="favico.png">
     <link rel="stylesheet" type="text/css" href="/static/css/corr2.css">
-    
+
     <script type="application/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
     <script type="application/javascript" src="/static/js/corr2.js"></script>
 </head>
@@ -33,57 +33,58 @@
                     <div class="section" data-id="{{ s.id }}">
                         <div class="section-title">
                             <h2>{{ s.title }}</h2>
-                            {% for f in s.fields %}
-                                {% if f.type == 'gen' %}
-                                    <div
-                                    class="input-row gen"
-                                    data-id="{{ f.id }}"
-                                    {% if f.mandatory %}
-                                        data-mandatory="{{ f.mandatory }}"
-                                    {% endif %}
-                                    {% if f.default is not none %}
-                                        data-default="{{ f.default }}"
-                                    {% endif %}>
-                                        <div class="title">{{ f.title }}</div>
-                                        <div class="input">
-                                            {% if f.multiline %}
-                                                <textarea></textarea>
-                                            {% else %}
-                                                <input type="text">
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <div class="clear"></div>
-                                    </div>
-                                {% endif %}
-                                {% if f.type == 'grade' %}
-                                    <div
-                                    class="input-row grade"
-                                    data-id="{{ f.id }}"
-                                    data-max="{{ f.max }}"
-                                    {% if f.default is not none %}
-                                        data-default="{{ f.default }}"
-                                    {% endif %}
-                                    {% if not f.exclude_from_total %}
-                                        data-intot="true"
-                                    {% endif %}>
-                                        <div class="title">{{ f.title }}</div>
-                                        <div class="input"><input type="text"></div>
-                                        <div class="buttons">
-                                            {% for ws in f.ws %}
-                                                <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption }}</div>
-                                            {% endfor %}
-                                        </div>
-                                        {{ field_info(f) }}
-                                        
-                                        <div class="clear"></div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
                         </div>
+
+                        {% for f in s.fields %}
+                            {% if f.type == 'gen' %}
+                                <div
+                                class="input-row gen"
+                                data-id="{{ f.id }}"
+                                {% if f.mandatory %}
+                                    data-mandatory="{{ f.mandatory }}"
+                                {% endif %}
+                                {% if f.default is not none %}
+                                    data-default="{{ f.default }}"
+                                {% endif %}>
+                                    <div class="title">{{ f.title }}</div>
+                                    <div class="input">
+                                        {% if f.multiline %}
+                                            <textarea></textarea>
+                                        {% else %}
+                                            <input type="text">
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="clear"></div>
+                                </div>
+                            {% endif %}
+                            {% if f.type == 'grade' %}
+                                <div
+                                class="input-row grade"
+                                data-id="{{ f.id }}"
+                                data-max="{{ f.max }}"
+                                {% if f.default is not none %}
+                                    data-default="{{ f.default }}"
+                                {% endif %}
+                                {% if not f.exclude_from_total %}
+                                    data-intot="true"
+                                {% endif %}>
+                                    <div class="title">{{ f.title }}</div>
+                                    <div class="input"><input type="text"></div>
+                                    <div class="buttons">
+                                        {% for ws in f.ws %}
+                                            <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    {{ field_info(f) }}
+
+                                    <div class="clear"></div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 {% endfor %}
-                
+
                 <div class="section">
                     <div class="input-row submit">
                         <div class="input"><input type="submit" value="save"></div>

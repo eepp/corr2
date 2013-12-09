@@ -336,7 +336,7 @@ function gotoNextField() {
 }
 
 function getSectionFirstField($section) {
-    return $section.find('.input-row.gen:first, .input-row.grade:first');
+    return $section.find('.input-row.gen, .input-row.grade').first();
 }
 
 function gotoRelativeSection(cb) {
