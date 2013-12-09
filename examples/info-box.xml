@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This cOrr2 XML template demonstrates info boxes.
+-->
+<corr>
+    <head>
+        <title>info box</title>
+        <settings>
+            <unique-id section-id="id" field-id="name" />
+        </settings>
+    </head>
+    <body>
+        <section id="id" title="Identification">
+            <gen id="name" title="Student name" />
+        </section>
+        <section id="test" title="Test">
+            <gen id="escaped-info" title="Escaped info box">
+                <info escape="true"><![CDATA[
+This is escaped, so putting stuff like
+< & > here is okay.]]></info>
+            </gen>
+            <gen id="html-info-p" title="HTML info box: paragraphs">
+                <info>
+                    <![CDATA[
+                        <p>This is <b>not</b> escaped.</p>
+                        <p>This is more <i>versatile</i> because it's direct <code>HTML</code>.</p>
+                    ]]>
+                </info>
+            </gen>
+            <gen id="html-info-ul" title="HTML info box: lists">
+                <info>
+                    <![CDATA[
+                        <p>Sometimes, a list is convenient:</p>
+                        <ul>
+                            <li>An item</li>
+                            <li>An other</li>
+                            <li>More items...</li>
+                            <li>Mooooore</li>
+                        </ul>
+                    ]]>
+                </info>
+            </gen>
+            <gen id="html-info-table" title="HTML info box: tables">
+                <info>
+                    <![CDATA[
+                        <p>A table can be useful too:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>x</th>
+                                    <th>y</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>13</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    ]]>
+                </info>
+            </gen>
+        </section>
+    </body>
+</corr>

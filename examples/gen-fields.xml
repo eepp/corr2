@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This cOrr2 XML template demonstrates general fields.
+-->
+<corr>
+    <head>
+        <title>general fields</title>
+        <settings>
+            <unique-id section-id="id" field-id="name" />
+        </settings>
+    </head>
+    <body>
+        <section id="id" title="Identification">
+            <gen id="name" title="Student name" />
+        </section>
+        <section id="test" title="Test">
+            <!--
+            This is a general field: no title, no multiline, not mandatory, but
+            its value will be recorded within the JSON output file.
+            -->
+            <gen id="basic" />
+
+            <!-- With a title, no multiline, not mandatory -->
+            <gen id="title" title="Some title (&lt;code&gt;supports HTML&lt;/code&gt;)"/>
+
+            <!-- Multiline -->
+            <gen id="multi" title="Multiline" multiline="true" />
+
+            <!-- Mandatory -->
+            <gen id="mandatory" title="Mandatory" mandatory="true" />
+
+            <!-- With info box -->
+            <gen id="withinfo" title="With an info box" multiline="true" mandatory="true">
+                <info escape="true">Hello. I am your info.</info>
+            </gen>
+        </section>
+    </body>
+</corr>

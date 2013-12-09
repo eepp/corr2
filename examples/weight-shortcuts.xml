@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This cOrr2 XML template demonstrates default and custom weight shortcuts.
+-->
+<corr>
+    <head>
+        <title>weight shortcuts</title>
+        <settings>
+            <!--
+            Default weight shortcuts: used for a grade field when no custom
+            weight shortcuts are defined. If this is not defined here, the
+            default is: max, *0.75, *0.5, *0.25 and 0.
+            -->
+            <default-weight-shortcuts>
+                <!-- Maximum value -->
+                <shortcut type="max" />
+
+                <!-- Multiple of maximum value -->
+                <shortcut type="mul" val="0.5" caption="½" />
+
+                <!-- Other multiple without caption ("val" is used as a caption) -->
+                <shortcut type="mul" val="0.3" />
+
+                <!-- Absolute value -->
+                <shortcut type="abs" val="2" />
+
+                <!-- Zero -->
+                <shortcut type="mul" val="0" />
+            </default-weight-shortcuts>
+
+            <unique-id section-id="id" field-id="name" />
+        </settings>
+    </head>
+    <body>
+        <section id="id" title="Identification">
+            <gen id="name" title="Student name" />
+        </section>
+        <section id="test" title="Test">
+            <!--
+            This field will use the default weight shortcuts (defined above) since
+            it's not defining any custom weight shortcuts.
+            -->
+            <grade id="def" max="10" caption="Default weight shortcuts" />
+
+            <!-- This field will use custom weight shortcuts instead of default ones. -->
+            <grade id="custom" max="10" caption="Custom weight shortcuts">
+                <custom-weight-shortcuts>
+                    <shortcut type="max" />
+                    <shortcut type="abs" val="6" />
+                    <shortcut type="mul" val="0.25" caption="1/4" />
+
+                    <!-- Negative value is also possible -->
+                    <shortcut type="abs" val="-1" />
+                </custom-weight-shortcuts>
+            </grade>
+        </section>
+    </body>
+</corr>

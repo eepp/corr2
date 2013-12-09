@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+A very simple cOrr2 XML template.
+-->
+<corr>
+    <head>
+        <title>ENG101: report #2</title>
+        <settings>
+            <unique-id section-id="id" field-id="name" />
+        </settings>
+    </head>
+
+    <body>
+        <section id="id" title="Identification">
+            <gen id="name" title="Student name" />
+        </section>
+
+        <section id="report" title="Text report">
+            <gen id="subject" title="Report subject" mandatory="true" />
+            <grade id="title" title="Folder/title page" max="5">
+                <info>
+                    <![CDATA[
+                        <p>Include:</p>
+                        <ul>
+                            <li>Student name and ID</li>
+                            <li>School name</li>
+                            <li>Date</li>
+                            <li>Report title</li>
+                        </ul>
+                    ]]>
+                </info>
+            </grade>
+            <grade id="indexc" title="Index cards" max="10" />
+            <grade id="ownwords" title="Own words" max="15" />
+            <grade id="headings" title="Headings" max="15" default="max" />
+            <grade id="language" title="Language" max="20">
+                <info escape="true">Spelling (5), grammar (10), punctuation (5)</info>
+            </grade>
+            <grade id="order" title="Logical order, complete" max="20" />
+            <grade id="timeline" title="Timeline" max="15" />
+            <gen id="comments" title="Comments" multiline="true" />
+        </section>
+    </body>
+</corr>
