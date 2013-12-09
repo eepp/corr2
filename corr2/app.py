@@ -1,18 +1,28 @@
 import sys
 import os.path
-import corr2.server
-import corr2.templateparser
+import logging
 from optparse import OptionParser
-import json
+from corr2 import server
+from corr2 import templateparser
 
 
 __version__ = 'cOrr 2.0.0'
 
 
-def _cmdline_error(parser, err):
-    sys.stderr.write('Error: ' + err + '\n')
+def _cmdline_error(parser, err_msg):
+    sys.stderr.write('Command-line error: ' + err_msg + '\n')
     parser.print_help()
     sys.exit(1)
+
+
+def _template_error(err):
+    sys.stderr.write('Template error: ' + str(err) + '\n')
+    sys.exit(2)
+
+
+def _unknown_error(err):
+    sys.stderr.write('Unknown error: ' + str(err) + '\n')
+    raise err
 
 
 def _parse_args():
@@ -39,18 +49,38 @@ def _parse_args():
     return opts, args[0]
 
 
-def start_server(host, port):
-    server.run(host, port)
+def start(host, port, template_path):
+    # parse template
+    logging.info('Parsing template "{}"'.format(template_path))
+    try:
+        tparser = templateparser.TemplateParser.fromfile(template_path)
+        template = tparser.parse()
+        #print(json.dumps(template.sections, indent=4, ensure_ascii=False))
+    except templateparser.TemplateParserError as err:
+        _template_error(err)
+    except Exception as err:
+        _unknown_error(err)
+    logging.info('Parsed template:')
+    logging.info('    Title: {}'.format(template.title))
+    logging.info('    Sections:')
+    for section in template.sections.values():
+        logging.info('        {}:'.format(section.title))
+        for field in section.fields.values():
+            logging.info('            {}  [{}]'.format(field.title, str(field)))
+
+    # start server
+    logging.info('Starting cOrr2 server')
+    server.run(host, port, template)
 
 
 def run():
+    # configure logging
+    logging.basicConfig(level=logging.INFO)
+
     # parse command line arguments
     opts, template_path = _parse_args()
-    
-    # parse template
-    tparser = corr2.templateparser.TemplateParser.fromfile(template_path)
-    template = tparser.parse()
-    print(json.dumps(template.sections, indent=4, ensure_ascii=False))
 
-    # start server
-    #corr2.start_server(opts.host, opts.port)
+    # start app
+    logging.info('Starting cOrr2')
+    start(opts.host, opts.port, template_path)
+    logging.info('Stopping cOrr2')
