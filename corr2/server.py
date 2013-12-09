@@ -7,5 +7,5 @@ def _ep_index():
     return 'oh hi!'
 
 
-def run(host, port):
+def run(host, port, template):
     app.run(host=host, port=port, debug=True)

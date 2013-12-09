@@ -1,7 +1,9 @@
 import sys
 import os.path
-from corr2 import server
+import corr2.server
+import corr2.templateparser
 from optparse import OptionParser
+import json
 
 
 __version__ = 'cOrr 2.0.0'
@@ -44,6 +46,11 @@ def start_server(host, port):
 def run():
     # parse command line arguments
     opts, template_path = _parse_args()
+    
+    # parse template
+    tparser = corr2.templateparser.TemplateParser.fromfile(template_path)
+    template = tparser.parse()
+    print(json.dumps(template.sections, indent=4, ensure_ascii=False))
 
     # start server
-    start_server(opts.host, opts.port)
+    #corr2.start_server(opts.host, opts.port)
