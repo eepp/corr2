@@ -9,6 +9,8 @@ class WeightShortcut:
         self.val = val
         self.realval = val
         self.caption = caption
+        if (val == 0):
+            self.type = 'min'
 
 
 class Field:
@@ -16,11 +18,17 @@ class Field:
 
 
 class GenField(Field):
+    def __init__(self):
+        self.type = 'gen'
+
     def __str__(self):
         return 'general field'
 
 
 class GradeField(Field):
+    def __init__(self):
+        self.type = 'grade'
+
     def __str__(self):
         return 'grade field'
 
@@ -53,10 +61,9 @@ class TemplateParser:
 
     def __init__(self, tree):
         self._options_cb = {
-            'allowTotalOverflow': self._parse_bool_option,
-            'allowTotalUnderflow': self._parse_bool_option,
-            'disableDefaultWeightShortcuts': self._parse_bool_option,
-            'init': self._parse_str_option
+            'allowTotalOverflow': self._get_bool_option,
+            'allowTotalUnderflow': self._get_bool_option,
+            'init': self._get_str_option
         }
         self._fields_cb = {
             'gen': self._get_gen_field,
@@ -69,6 +76,11 @@ class TemplateParser:
             WeightShortcut(wstype='mul', val=0.25, caption='¼'),
             WeightShortcut(wstype='mul', val=0, caption='0')
         ]
+        self._def_options = {
+            'allowTotalOverflow': True,
+            'allowTotalUnderflow': True,
+            'init': 'default'
+        }
         self._tree = tree
 
     def parse(self):
@@ -80,6 +92,9 @@ class TemplateParser:
 
         # parse body
         self._parse_body(self._tree.xpath('/corr/body')[0])
+
+        # ensure there's no duplicate section/field
+        self._ensure_no_duplicates()
 
         # ensure unique ID points to existing field
         self._ensure_unique_id()
@@ -95,13 +110,11 @@ class TemplateParser:
     def _is_valid_id(tid):
         return re.match('^[a-zA-Z][a-zA-Z0-9_-]*$', tid)
 
-    def _parse_bool_option(self, option_el):
-        val = TemplateParser._bool_from_str(option_el.get('value'))
-        self._t.options[option_el.get('name')] = val
+    def _get_bool_option(self, option_el):
+        return TemplateParser._bool_from_str(option_el.get('value'))
 
-    def _parse_str_option(self, option_el):
-        val = option_el.get('value')
-        self._t.options[option_el.get('name')] = val
+    def _get_str_option(self, option_el):
+        return option_el.get('value')
 
     def _get_ws(self, ws_el):
         shortcuts = []
@@ -120,9 +133,10 @@ class TemplateParser:
 
     def _parse_settings(self, settings_el):
         # parse options
-        self._t.options = {}
+        self._t.options = deepcopy(self._def_options)
         for option_el in settings_el.findall('option'):
-            self._options_cb[option_el.get('name')](option_el)
+            option_val = self._options_cb[option_el.get('name')](option_el)
+            self._t.options[option_el.get('name')] = option_val
 
         # save default weight shortcuts
         dws_el = settings_el.find('default-weight-shortcuts')
@@ -144,11 +158,15 @@ class TemplateParser:
     def _get_gen_field(self, field_el):
         field = GenField()
 
-        # multiline
+        # multiline, mandatory
         field.multiline = False
+        field.mandatory = False
         multiline = field_el.get('multiline')
+        mandatory = field_el.get('mandatory')
         if multiline is not None:
             field.multiline = TemplateParser._bool_from_str(multiline)
+        if mandatory is not None:
+            field.mandatory = TemplateParser._bool_from_str(mandatory)
 
         return field
 
@@ -223,41 +241,50 @@ class TemplateParser:
             raise TemplateParserError('invalid ID format: "{}"'.format(sid))
         section.id = sid
         section.title = sid
-        section.fields = {}
+        section.fields = []
         if title is not None:
             section.title = title
 
         # parse all fields
         for field_el in section_el.findall('*'):
             field = self._get_field(field_el)
-            if field.id in section.fields:
-                raise TemplateParserError('duplicate field "{}" in section "{}"'.format(field.id, section.id))
-            section.fields[field.id] = field
+            section.fields.append(field)
 
         # add to template sections
-        if section.id in self._t.sections:
-            raise TemplateParserError('duplicate section "{}"'.format(section.id))
-        self._t.sections[section.id] = section
+        self._t.sections.append(section)
 
     def _parse_body(self, body_el):
         # parse all sections
-        self._t.sections = {}
+        self._t.sections = []
         for section_el in body_el.findall('section'):
             self._parse_section(section_el)
 
+    def _ensure_no_duplicates(self):
+        # build list of (section ID, field ID) pairs
+        sections_fields = []
+        for section in self._t.sections:
+            sid = section.id
+            sections_fields.extend([(sid, f.id) for f in section.fields])
+
+        # make sure there's no duplicate
+        if len(set(sections_fields)) != len(sections_fields):
+            raise TemplateParserError('duplicate section/field ID')
+
     def _ensure_unique_id(self):
         # try to find field pointed to by unique ID
-        if self._usid in self._t.sections:
-            if self._ufid in self._t.sections[self._usid].fields:
-                return
+        for section in self._t.sections:
+            if section.id == self._usid:
+                for field in section.fields:
+                    if field.id == self._ufid:
+                        return
 
         # not found
         raise TemplateParserError('cannot find unique ID (section "{}", field "{}")'.format(self._usid, self._ufid))
 
     def _compute_total(self):
         self._t.total = 0
-        for section in self._t.sections.values():
-            for field in section.fields.values():
+        for section in self._t.sections:
+            for field in section.fields:
                 if type(field) is GradeField and not field.exclude_from_total:
                     if field.max >= 0:
                         self._t.total += field.max

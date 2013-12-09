@@ -52,9 +52,9 @@ def _parse_args():
 def _log_template(template):
     logging.info('    Title: {}'.format(template.title))
     logging.info('    Sections:')
-    for section in template.sections.values():
+    for section in template.sections:
         logging.info('        {}:'.format(section.title))
-        for field in section.fields.values():
+        for field in section.fields:
             logging.info('            {}  [{}]'.format(field.title, str(field)))
 
 

@@ -1,14 +1,17 @@
 import logging
-from flask import Flask
+import flask
 
 
-flask_app = Flask(__name__)
+_template = None
+_flask_app = flask.Flask(__name__)
 
 
-@flask_app.route('/')
+@_flask_app.route('/')
 def _ep_index():
-    return 'oh hi!'
+    return flask.render_template('corr2.htm', template=_template)
 
 
 def run(host, port, template):
-    flask_app.run(host=host, port=port)
+    global _template
+    _template = template
+    _flask_app.run(host=host, port=port)

@@ -1,0 +1,116 @@
+{% set opts = template.options %}
+{% macro field_info(f) -%}
+    {% if f.info is not none %}
+        {% if f.info['escape'] %}
+            <div class="info">{{ f.info.text | escape }}</div>
+        {% else %}
+            <div class="info">{{ f.info.text }}</div>
+        ­{% endif %}
+    {% endif %}
+{%- endmacro %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ template.title }} &mdash; cOrr2</title>
+    
+    <link rel="icon" type="image/png" href="favico.png">
+    <link rel="stylesheet" type="text/css" href="/static/css/corr2.css">
+    
+    <script type="application/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
+    <script type="application/javascript" src="/static/js/corr2.js"></script>
+</head>
+<body>
+    <div id="corr-container">
+        <h1>c<strong>O</strong>rr<sup>2</sup><code>{{ template.title }}</code></h1>
+        <div id="corr"
+        data-max-total="{{ template.total }}"
+        data-allow-total-overflow="{{ opts.allowTotalOverflow | lower }}"
+        data-allow-total-underflow="{{ opts.allowTotalUnderflow | lower }}"
+        data-init="{{ opts.init }}">
+            <form autocomplete="off" method="post" action="/save">
+                {% for s in template.sections %}
+                    <div class="section">
+                        <div class="section-title">
+                            <h2>{{ s.title }}</h2>
+                            {% for f in s.fields %}
+                                {% if f.type == 'gen' %}
+                                    <div
+                                    class="input-row gen"
+                                    {% if f.mandatory %}
+                                        data-mandatory="{{ f.mandatory }}"
+                                    {% endif %}
+                                    {% if f.default is not none %}
+                                        data-default="{{ f.default }}"
+                                    {% endif %}>
+                                        <div class="title">{{ f.title }}</div>
+                                        <div class="input">
+                                            {% if f.multiline %}
+                                                <textarea></textarea>
+                                            {% else %}
+                                                <input type="text">
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="clear"></div>
+                                    </div>
+                                {% endif %}
+                                {% if f.type == 'grade' %}
+                                    <div
+                                    class="input-row grade"
+                                    data-max="{{ f.max }}"
+                                    {% if f.default is not none %}
+                                        data-default="{{ f.default }}"
+                                    {% endif %}
+                                    {% if not f.exclude_from_total %}
+                                        data-intot="true"
+                                    {% endif %}>
+                                        <div class="title">{{ f.title }}</div>
+                                        <div class="input"><input type="text"></div>
+                                        <div class="buttons">
+                                            {% for ws in f.ws %}
+                                                <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption }}</div>
+                                            {% endfor %}
+                                        </div>
+                                        {{ field_info(f) }}
+                                        
+                                        <div class="clear"></div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                <div class="section">
+                    <div class="input-row submit">
+                        <div class="input"><input type="submit" value="save"></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="fixed-side-container">
+        <div class="box ctrl-status">
+            <div class="status">
+                <div class="total"><span id="total"></span><span class="max">/<span id="max-total"></span></span></div>
+                <div id="left-fields" class="left-fields"></div>
+                <div class="clear"></div>
+            </div>
+            <div class="ctrl">
+                <div class="btn max" id="btn-max">max</div>
+                <div class="btn zero" id="btn-zero">zero</div>
+                <div class="btn" id="btn-empty">empty</div>
+                <div class="btn" id="btn-def">default</div>
+            </div>
+        </div>
+        <div class="box info" id="info-box">
+            <h2>info</h2>
+            <div id="info">
+                allo
+            </div>
+        </div>
+    </div>
+</body>
+</html>

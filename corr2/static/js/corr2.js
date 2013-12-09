@@ -1,4 +1,3 @@
-
 var corrModel = {};
 var $inTotFields;
 var $mandatoryFields;
@@ -43,7 +42,7 @@ function getLeftFieldsCount() {
     // count only left mandatory fields
     var count = 0;
     $mandatoryFields.each(function() {
-        if (isEmptyInput($(this).find('input'))) {
+        if (isEmptyInput(getFieldInput($(this)))) {
             count++;
         }
     });
