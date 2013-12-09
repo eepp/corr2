@@ -239,3 +239,4 @@ todo
   * XML template RELAX NG validation
   * edit already saved results
   * prevent results file overwriting
+  * use setuptools
