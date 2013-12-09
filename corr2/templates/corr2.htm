@@ -75,7 +75,7 @@
                                     <div class="input"><input type="text" name="{{ input_name(s, f) }}"></div>
                                     <div class="buttons">
                                         {% for ws in f.ws %}
-                                            <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption }}</div>
+                                            <div class="btn {{ ws.type }}" data-val="{{ ws.realval }}">{{ ws.caption | safe }}</div>
                                         {% endfor %}
                                     </div>
                                     {{ field_info(f) }}
@@ -112,9 +112,7 @@
         </div>
         <div class="box info" id="info-box">
             <h2>info</h2>
-            <div id="info">
-
-            </div>
+            <div id="info"></div>
         </div>
     </div>
 </body>
