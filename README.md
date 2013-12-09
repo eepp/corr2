@@ -2,22 +2,20 @@ cOrr2
 =====
 
 Grading is painful. It generally involves (at least in my case) repeating the
-same thing hundreds of times in a row. This repetitive task is prone to errors
+same thing hundreds of times in a row. This repetitive task is prone to human error
 and may also lead to severe mental disorder.
 
 **cOrr2** puts (more) fun into grading. [Try it here!](http://eepp.github.io/corr2)
 
 cOrr2 is a Web-based grading tool. The input is an XML description (hopefully
-a more visual editor can be built in the future) of a grade sheet and the output
-is a Web template where you may easily fill grades in.
+a more visual editor will be built in the future) of a grade sheet (called *template*)
+and the output is a Web template where you may easily fill grades in.
 
 Here's a simple example of a template:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-A very simple cOrr2 XML template.
--->
+<!-- A very simple cOrr2 XML template. -->
 <corr>
     <head>
         <title>ENG101: report #2</title>
@@ -166,7 +164,11 @@ cOrr2 is built in Python 3 and needs the following packages:
 getting started
 ---------------
 
-After cloning, you need to compile the CSS file using `lessc`:
+Clone:
+
+    $ git clone https://github.com/eepp/corr2 && cd corr2
+
+Compile the CSS file using `lessc`:
 
     $ make -C less
 
@@ -175,9 +177,9 @@ Python's path:
 
     $ export PYTHONPATH=$(pwd)
 
-and start cOrr2:
+Start cOrr2:
 
-    $ python bin/corr examples/simple.xml
+    $ python bin/corr.py examples/simple.xml
 
 You should see something like:
 
@@ -208,7 +210,7 @@ JSON results files will be written to your current working directory. You may
 change this output directory (and other stuff like the host address and port)
 using options. Do
 
-    $ python bin/corr -h
+    $ python bin/corr.py -h
 
 to see the list of options.
 
@@ -229,6 +231,10 @@ Within the Web editor, the following keyboard shortcuts should work:
     * `S`: max × 0.5
     * `D`: max × 0.75
   * `Ctrl+Enter`: save (submit form)
+
+Please note that, for obvious reasons, some keyboard shortcuts do not work
+within multiline text areas. When stuck there, you can always use `Tab` and
+`Shift+Tab` to get out.
 
 
 todo
