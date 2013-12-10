@@ -202,7 +202,10 @@ class TemplateParser:
             elif ws.type == 'max':
                 ws.realval = field.max
             if ws.caption is None:
-                ws.caption = str(round(ws.realval, 2))
+                c = round(ws.realval, 2)
+                if int(c) == c:
+                    c = int(c)
+                ws.caption = str(c)
 
     def _get_grade_field(self, field_el):
         field = GradeField()
