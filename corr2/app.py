@@ -49,6 +49,8 @@ def _parse_args():
     # check positional arguments
     if len(args) < 1:
         _cmdline_error(parser, 'no template path provided.')
+    elif len(args) > 1:
+        _cmdline_error(parser, 'too many arguments.')
     elif not os.path.isfile(args[0]):
         _cmdline_error(parser, '"{}" does not exist or is not a file.'.format(args[0]))
 
