@@ -439,7 +439,8 @@ function initKeysActions() {
                 break;
 
             case 88:
-                // x
+            case 32:
+                // x, space
                 e.preventDefault();
                 applyMaxFracCurrentField(1);
                 break;

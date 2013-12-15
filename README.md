@@ -226,7 +226,7 @@ Within the Web editor, the following keyboard shortcuts should work:
   * `Ctrl+Up`: go to previous section
   * specific to grade fields:
     * `Z`: zero
-    * `X`: max
+    * `X` or `Space`: max
     * `A`: max × 0.25
     * `S`: max × 0.5
     * `D`: max × 0.75
