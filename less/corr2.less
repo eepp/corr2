@@ -1,3 +1,6 @@
+// default font size
+@font-size: 16px;
+
 // color theme
 @color-bg: #333333;
 @color-title: #d63e4d;
@@ -14,6 +17,9 @@
 @fixed-side-width: 400px;
 
 // common mix-ins
+.def-font-size() {
+    font-size: @font-size;
+}
 .monospace() {
     font-family: 'Consolas', 'Monaco', 'Ubuntu Mono', monospace;
     font-size: 95%;
@@ -83,7 +89,7 @@
 }
 body {
     font-family: 'Arial', 'Helvetica', 'Ubuntu', sans-serif;
-    font-size: 16px;
+    font-size: @font-size;
     background: url(../img/bg.png) @color-bg;
 }
 #corr-container {
@@ -260,9 +266,13 @@ body {
     width: @fixed-side-width;
 
     .box {
+        @padding-sides: @gutter;
+        @border-width: 1px;
+        @box-inner-width: (@fixed-side-width - 2 * (@padding-sides + @border-width));
+
         background: fade(black, 50%);
-        border: 1px solid fade(white, 20%);
-        padding: @gutter;
+        border: @border-width solid fade(white, 20%);
+        padding: @padding-sides;
         .border-box;
         width: 100%;
         margin-top: @gutter-half;
@@ -305,16 +315,22 @@ body {
                 }
             }
             .ctrl {
+                @nb-buttons: 4;
                 text-align: left;
                 margin-bottom: @gutter-half;
+                font-size: 0; // usual hack to reduce inline text spaces between elements
 
                 .btn {
+                    @margin: @gutter-half;
+
                     .press-btn;
+                    .def-font-size;
                     background: #777;
                     color: #222;
                     display: inline-block;
-                    width: 55px;
-                    margin-left: @gutter-half;
+                    width: floor((@box-inner-width - (@nb-buttons - 1) * @margin) / @nb-buttons);
+                    margin-left: @margin;
+                    .border-box;
                     &:first-child {
                         margin-left: 0;
                     }
