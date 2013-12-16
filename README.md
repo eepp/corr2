@@ -60,7 +60,7 @@ Here's a simple example of a template:
 
 After running cOrr2, go to its URL and you get this:
 
-![cOrr2 output example](http://0x3b.org/ss/thouing952.png)
+![cOrr2 output example](http://0x3b.org/ss/pickaway641.png)
 
 Once saved, the output is a JSON file which can later be processed to give back
 results to students or a report to the school:
@@ -68,8 +68,8 @@ results to students or a report to the school:
 ```javascript
 {
     "infos": {
-        "date": "2013-12-09 16:01:57", 
-        "hostname": "archphil", 
+        "date": "2013-12-16 02:20:23", 
+        "hostname": "eeppdesk", 
         "max": 100.0, 
         "output_filename": "/home/eepp/dev/corr2/John Smith.json", 
         "template_path": "/home/eepp/dev/corr2/examples/simple.xml", 
