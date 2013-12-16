@@ -55,11 +55,11 @@ function setFieldInputValue($field, val) {
 }
 
 function initInTotFieldsEmpty() {
-    $inTotFields.find('input').val('');
+    $('.input-row.grade').find('input').val('');
 }
 
 function initInTotFieldsDef() {
-    $inTotFields.each(function() {
+    $('.input-row.grade').each(function() {
         var def = getDataStr($(this), 'default');
         if (def !== null) {
             setFieldInputValue($(this), def);
@@ -70,14 +70,14 @@ function initInTotFieldsDef() {
 }
 
 function initInTotFieldsMax() {
-    $inTotFields.each(function() {
+    $('.input-row.grade').each(function() {
         var max = getFieldMax($(this));
         getFieldInput($(this)).val(max);
     });
 }
 
 function initInTotFieldsZero() {
-    $inTotFields.find('input').val('0');
+    $('.input-row.grade').find('input').val('0');
 }
 
 function initInTotFields() {
