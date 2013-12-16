@@ -245,3 +245,4 @@ todo
   * edit already saved results
   * prevent results file overwriting
   * use setuptools
+  * try AngularJS?
