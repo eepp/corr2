@@ -201,6 +201,8 @@ class TemplateParser:
                 ws.realval = round(ws.val * field.max, 10)
             elif ws.type == 'max':
                 ws.realval = field.max
+            if int(ws.realval) == ws.realval:
+                ws.realval = int(ws.realval)
             if ws.caption is None:
                 c = round(ws.realval, 2)
                 if int(c) == c:
