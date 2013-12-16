@@ -306,6 +306,7 @@ body {
             }
             .ctrl {
                 text-align: left;
+                margin-bottom: @gutter-half;
 
                 .btn {
                     .press-btn;
@@ -329,6 +330,21 @@ body {
                     }
                     &.zero {
                         .min-btn;
+                    }
+                }
+            }
+            .submit {
+                button {
+                    .press-btn;
+                    .border-box;
+                    width: 100%;
+                    color: fade(black, 80%);
+                    background-color: @color-section-title;
+                    &:hover {
+                        background-color: lighten(@color-section-title, 10%);
+                    }
+                    &:active {
+                        background-color: darken(@color-section-title, 10%);
                     }
                 }
             }

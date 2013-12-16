@@ -145,7 +145,13 @@ function validateForm() {
     return validForm;
 }
 
-function initSaveAction() {
+function initSaveActions() {
+    // button
+    $('#btn-save').click(function() {
+        submitForm();
+    });
+
+    // form validation
     $('#corr form').submit(function(e) {
         if (validateForm()) {
             if (confirm('save?')) {
@@ -494,10 +500,10 @@ function init() {
     initCorrModel();
     initInTotFields();
     initMandatoryFields();
-    initInTotFieldsActions();
+    initInTotFieldsActions()
     initRowsActions();
     initKeysActions();
-    initSaveAction();
+    initSaveActions();
     initStatus();
     initFocusFirstField();
 }
