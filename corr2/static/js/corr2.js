@@ -439,7 +439,8 @@ function initKeysActions() {
     $('.input-row.grade input').keydown(function(e) {
         switch (e.keyCode) {
             case 90:
-                // z
+            case 27:
+                // z, escape
                 e.preventDefault();
                 applyMaxFracCurrentField(0);
                 break;
