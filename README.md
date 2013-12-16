@@ -153,7 +153,7 @@ results to students or a report to the school:
 dependencies
 ------------
 
-cOrr2 is built in Python 3 and needs the following packages:
+cOrr2 is developed in Python 3 and needs the following packages to live:
 
   * [lxml](http://lxml.de/)
   * [Flask](http://flask.pocoo.org/docs/)
