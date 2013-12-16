@@ -198,7 +198,7 @@ class TemplateParser:
     def _resolve_field_ws(self, field):
         for ws in field.ws:
             if ws.type == 'mul':
-                ws.realval = ws.val * field.max
+                ws.realval = round(ws.val * field.max, 10)
             elif ws.type == 'max':
                 ws.realval = field.max
             if ws.caption is None:
